@@ -1,6 +1,13 @@
 pipeline {
     agent any
+
     stages {
+        stage('Check') {
+            steps {
+                // Cloning the GitHub repository
+                git branch: 'main', url: 'https://github.com/ramanpreetk197/cicd-azurefunction.git', credentialsId: 'rm'
+            }
+        }
         stage('Build') {
             steps {
                 script {
