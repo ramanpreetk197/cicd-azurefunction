@@ -3,37 +3,20 @@
 Jenkins CI/CD Pipeline to Deploy Azure Functions
 This project sets up a CI/CD pipeline using Jenkins to deploy a Python-based Azure Function. The pipeline integrates with GitHub for source control and uses Azure CLI for deployment.
 
-Project Overview
-Azure Function: A simple HTTP-triggered "Hello, World!" function in Python.
+# Azure Function CI/CD Project
 
-Pipeline Stages:
-Build: Install dependencies.
-Test: Run automated test cases.
-Deploy: Deploy to Azure using Azure CLI.
+## Overview
+This project demonstrates a simple Python-based Azure Function with a Jenkins CI/CD pipeline to automate build, test, and deployment processes.
 
-Setup Steps
-Azure Function: Create and deploy an HTTP-triggered function in Python.
-GitHub: Push code (app.py, requirements.txt, test_function.py, Jenkinsfile) to a new repository.
+## Directory Structure
+- `/app`: Contains Azure Function code and dependencies.
+- `/tests`: Contains the test suite for validating the deployed Azure Function.
+- `Jenkinsfile`: Jenkins pipeline configuration for CI/CD.
+- `README.md`: Project overview and setup instructions.
 
-Jenkins:
-Install required plugins (GitHub, Azure CLI, Pipeline).
-Add Azure Service Principal credentials.
-Create a pipeline linked to the GitHub repository.
+## Setup Instructions
 
-Run Pipeline:
-Push changes to trigger the Build, Test, and Deploy stages.
-Test Cases
-Verify HTTP status code 200.
-Check the response body contains "Hello, World!".
-
-
-Run tests with:
-
-bash
-Copy code
-pytest
-
-
-Verification
-Test the function via the Azure Function URL.
-Ensure all pipeline stages succeed in Jenkins.
+### 1. Set Up Azure Function
+### 2. Set Up Jenkins
+### 3. Run the Jenkins Pipeline
+### 4. Verify Deployment
