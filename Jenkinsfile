@@ -1,29 +1,37 @@
 pipeline {
     agent any
-    
+
+    environment {
+        PYTHON_HOME = 'C:\\Path\\To\\Python' // Update this path to your Python installation
+        PATH = "${PYTHON_HOME}\\Scripts;${PYTHON_HOME};${env.PATH}" // Ensure pip and Python are in the PATH
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
                 // Cloning the GitHub repository
-                git branch: 'main', 
-                    url: 'https://github.com/ramanpreetk197/cicd-azurefunction.git', 
+                git branch: 'main',
+                    url: 'https://github.com/ramanpreetk197/cicd-azurefunction.git',
                     credentialsId: 'rm1'
             }
         }
+        
         stage('Install Dependencies') {
             steps {
                 script {
                     echo 'Installing dependencies...'
-                    bat 'pip install -r requirements.txt'
+                    // Use the absolute path to python if needed
+                    bat '"${PYTHON_HOME}\\python.exe" -m pip install -r requirements.txt'
                 }
             }
         }
+
         stage('Run Tests') {
             steps {
                 script {
                     try {
                         echo 'Running tests...'
-                        bat 'pytest --junitxml=test_results.xml'
+                        bat '"${PYTHON_HOME}\\Scripts\\pytest.exe" --junitxml=test_results.xml'
                     } catch (Exception e) {
                         echo 'Tests failed. Check test results for details.'
                         currentBuild.result = 'UNSTABLE'
@@ -37,6 +45,7 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy to Azure') {
             steps {
                 script {
@@ -65,6 +74,7 @@ pipeline {
             }
         }
     }
+
     post {
         always {
             echo 'Pipeline execution completed.'
