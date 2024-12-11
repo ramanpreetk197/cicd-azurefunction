@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     echo 'Installing dependencies...'
-                    sh 'pip install -r requirements.txt'
+                    bat 'pip install -r requirements.txt'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
                 script {
                     try {
                         echo 'Running tests...'
-                        sh 'pytest --junitxml=test_results.xml'
+                        bat 'pytest --junitxml=test_results.xml'
                     } catch (Exception e) {
                         echo 'Tests failed. Check test results for details.'
                         currentBuild.result = 'UNSTABLE'
@@ -41,18 +41,18 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to Azure...'
-                    sh """
-                        # Login to Azure using Service Principal
-                        az login --service-principal \
-                            -u $AZURE_CLIENT_ID \
-                            -p $AZURE_CLIENT_SECRET \
-                            --tenant $AZURE_TENANT_ID
+                    bat """
+                        REM Login to Azure using Service Principal
+                        az login --service-principal ^
+                            -u %AZURE_CLIENT_ID% ^
+                            -p %AZURE_CLIENT_SECRET% ^
+                            --tenant %AZURE_TENANT_ID%
 
-                        # Package and deploy the function
+                        REM Package and deploy the function
                         zip -r function.zip *
-                        az functionapp deployment source config-zip \
-                            --resource-group $RESOURCE_GROUP \
-                            --name $FUNCTION_APP_NAME \
+                        az functionapp deployment source config-zip ^
+                            --resource-group %RESOURCE_GROUP% ^
+                            --name %FUNCTION_APP_NAME% ^
                             --src function.zip
                     """
                 }
@@ -60,7 +60,7 @@ pipeline {
             post {
                 cleanup {
                     echo 'Cleaning up workspace...'
-                    sh 'rm -f function.zip'
+                    bat 'del /f /q function.zip'
                 }
             }
         }
