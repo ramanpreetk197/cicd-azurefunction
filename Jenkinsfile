@@ -15,6 +15,9 @@ pipeline {
             steps {
                 script {
                     echo 'Installing dependencies...'
+                    // Verify Python and pip installation
+                    bat 'python --version'
+                    bat 'pip --version'
                     bat 'pip install -r app/requirements.txt'
                 }
             }
