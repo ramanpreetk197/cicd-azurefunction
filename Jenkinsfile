@@ -15,70 +15,31 @@ pipeline {
             steps {
                 script {
                     echo 'Installing dependencies...'
-                    // Use the absolute path to python if needed
-                    bat 'python -m pip install -r requirements.txt'
+                    bat 'pip install -r app/requirements.txt'
                 }
             }
         }
 
-        stage('Run Tests') {
+        stage('Test') {
             steps {
                 script {
-                    try {
-                        echo 'Running tests...'
-                        bat '"${PYTHON_HOME}\\Scripts\\pytest.exe" --junitxml=test_results.xml'
-                    } catch (Exception e) {
-                        echo 'Tests failed. Check test results for details.'
-                        currentBuild.result = 'UNSTABLE'
-                    }
-                }
-            }
-            post {
-                always {
-                    // Archive test results
-                    junit 'test_results.xml'
+                    echo 'Running tests...'
+                    bat 'pytest tests'
                 }
             }
         }
 
-        stage('Deploy to Azure') {
+        stage('Deploy') {
             steps {
                 script {
                     echo 'Deploying to Azure...'
                     bat """
-                        REM Login to Azure using Service Principal
-                        az login --service-principal ^
-                            -u %AZURE_CLIENT_ID% ^
-                            -p %AZURE_CLIENT_SECRET% ^
-                            --tenant %AZURE_TENANT_ID%
-
-                        REM Package and deploy the function
-                        zip -r function.zip *
-                        az functionapp deployment source config-zip ^
-                            --resource-group %RESOURCE_GROUP% ^
-                            --name %FUNCTION_APP_NAME% ^
-                            --src function.zip
+                        az login --service-principal -u %AZURE_CLIENT_ID% -p %AZURE_CLIENT_SECRET% --tenant %AZURE_TENANT_ID%
+                        zip -r app.zip app
+                        az functionapp deployment source config-zip --resource-group %RESOURCE_GROUP% --name %FUNCTION_APP_NAME% --src app.zip
                     """
                 }
             }
-            post {
-                cleanup {
-                    echo 'Cleaning up workspace...'
-                    bat 'del /f /q function.zip'
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline execution completed.'
-        }
-        success {
-            echo 'Deployment succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
