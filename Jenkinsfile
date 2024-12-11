@@ -7,7 +7,7 @@ pipeline {
                 // Cloning the GitHub repository
                 git branch: 'main', 
                     url: 'https://github.com/ramanpreetk197/cicd-azurefunction.git', 
-                    credentialsId: 'rm'
+                    credentialsId: 'rm1'
             }
         }
         stage('Install Dependencies') {
