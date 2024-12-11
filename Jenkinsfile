@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        PYTHON_HOME = 'C:\\Path\\To\\Python' // Update this path to your Python installation
-        PATH = "${PYTHON_HOME}\\Scripts;${PYTHON_HOME};${env.PATH}" // Ensure pip and Python are in the PATH
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -15,7 +10,7 @@ pipeline {
                     credentialsId: 'rm1'
             }
         }
-        
+
         stage('Install Dependencies') {
             steps {
                 script {
