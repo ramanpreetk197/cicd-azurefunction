@@ -11,12 +11,12 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
                 script {
                     echo 'Installing dependencies...'
                     // Use the absolute path to python if needed
-                    bat '"${PYTHON_HOME}\\python.exe" -m pip install -r requirements.txt'
+                    bat 'python -m pip install -r requirements.txt'
                 }
             }
         }
